@@ -1,17 +1,27 @@
-<script>
-  export let item;
-  let items = [];
-  let queue = [];
+<script lang="typescript">
+  export let item: string;
+  interface Test {
+    text: string;
+    id: number;
+  }
+
+  let items: Test[] = [];
+  let queue: Test[] = [];
+
   const duration = 800;
 
   import { beforeUpdate, onDestroy } from "svelte";
 
   beforeUpdate(() => {
     if (item) {
-      queue = [{ text: item, id: Date.now() }, ...queue];
+      queue = [...queue, { text: item, id: Date.now() }];
       item = undefined;
     }
   });
+
+  function onClick() {
+    queue = [...queue, { text: Date.now().toString(), id: Date.now() }];
+  }
 
   const interval = setInterval(() => {
     if (queue.length > 0) {
@@ -52,7 +62,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   div {
     position: fixed;
     height: 50px;
@@ -67,18 +77,29 @@
     list-style: none;
     display: flex;
     height: 100%;
+
+    &:hover {
+      background: red;
+    }
+
+    & li {
+      width: 200px;
+      background: rgba(255, 245, 98, 0.7);
+      border-radius: 5px;
+      margin: 0 10px;
+    }
   }
 
-  li {
-    width: 200px;
-    background: rgba(255, 245, 98, 0.7);
-    border-radius: 5px;
-    margin: 0 10px;
-  }
+  // li {
+  //   width: 200px;
+  //   background: rgba(255, 245, 98, 0.7);
+  //   border-radius: 5px;
+  //   margin: 0 10px;
+  // }
 </style>
 
 <div>
-  <ul>
+  <ul on:click={onClick}>
     {#each items as item, i (item.id)}
       <li
         in:transIn

@@ -1,4 +1,5 @@
 import App from './App.svelte'
+import Stream from './EventStream.svelte'
 
 const app = new App({
   target: document.body,
@@ -11,4 +12,8 @@ console.log(app)
 
 app.$on('change', evt => console.log(evt))
 
-export default app
+const stream = new Stream({
+  target: document.body
+})
+
+export default stream
